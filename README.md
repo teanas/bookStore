@@ -67,6 +67,8 @@ If no errors occured - the application has to be running on **ip**:_port_.
 
 ## Monitoring
 
+> Neither of the monitoring addons are pre-installed in the GKE cluster. The desired ones need to be manually added. Besides, some might find installing every addon overwhelming, and therefore, are able to decide which ones they really require.
+
 ### Prometheus
 
 * Install the Prometheus addon `kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/prometheus.yaml`.
