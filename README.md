@@ -30,7 +30,7 @@ To see it in the Swagger UI run `kubectl exec _name_ -- curl localhost:7777/swag
 
 > The application can be run either in a local Kubernetes cluster, or in a cluster in the cloud. The recommended choice is using the [GKE cloud](https://cloud.google.com/kubernetes-engine). Therefore, the whole setup is under the assumption that the cloud option has been chosen.
 
-0. First, run `gcloud init` in the command line.
+0. First, run `gcloud auth login` in the command line.
 1. Create a project `gcloud projects create bookStore`.
 2. Set the configured project as your default `gcloud config set project bookStore`.
 3. Install the kubectl-command tool for your project `gcloud components install kubectl`.
