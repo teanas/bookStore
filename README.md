@@ -126,8 +126,14 @@ In our case, extending the testbed can be delivered easily thanks to Istio. Foll
     - If desired, edit it in the preferred IDE -_can be skipped_.
 2. Change its main path in the **controller class** (e.g., change "/cart" to "/cart1" in the CartController class for the cart service).
 3. Create a new Docker image.
-4. Add another deployment file of the chosen service (but with a different naming, e.g., "cart1" instead of "cart" for the cart service, and the created in step 4 Docker image).
-5. Extend the istio-gateway file accordingly with a new entry for the virtual service under **http**. Following is an example for an added cart service with "/cart1", named "cart1" and 8888 as a port: 
+4. Copy the deployment file of the chosen service and edit it with the next changes:
+    - a different name, app and value for the enviromental variable "VERSION", e.g., "cart1" instead of "cart" for the cart service
+    - change the image to the created in step 4 Docker image
+    - change "port" in the Service configuration to an arbitrary one
+
+> Note that the new port number is arbitrary but should not collide with the existing services. For that check the ports in the deployment files in the respective Service configuration sections.
+  
+5. Extend the istio-gateway file accordingly with a new entry for the virtual service under **http**. Following is an example for an added cart service with "/cart1" and named "cart1": 
 ```
 - match:
     - uri:
@@ -135,12 +141,10 @@ In our case, extending the testbed can be delivered easily thanks to Istio. Foll
     route:
     - destination:
         host: cart1
-        port:
-          number: 8888
  ```  
 
        
-> Note that the new port number is arbitrary but should not collide with the existing services. For that check the ports in the gateway deployment file.
+
 
 
 
