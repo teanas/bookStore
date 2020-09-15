@@ -12,14 +12,14 @@ To get the **OpenAPI 3.0** specification run the following command, where _name_
 
 `kubectl exec _name_ -- curl localhost:7777/v3/api-docs > api.txt`.
 
-To see it in the ui run `kubectl exec _name_ -- curl localhost:7777/swagger-ui.html`.
+To see it in the Swagger UI run `kubectl exec _name_ -- curl localhost:7777/swagger-ui.html`.
 
 > The pod's name can be retrieved with `kubectl get pods`.
 
 ## Requirements
 
-- A Google Cloud account
-- The [gcloud-command tool](https://cloud.google.com/sdk/docs/quickstart)
+- A Google Cloud account,
+- The [gcloud-command tool](https://cloud.google.com/sdk/docs/quickstart).
 
 ## Installation
 
@@ -127,9 +127,9 @@ In our case, extending the testbed can be delivered easily thanks to Istio. Foll
 2. Change its main path in the **controller class** (e.g., change "/cart" to "/cart1" in the CartController class for the cart service).
 3. Create a new Docker image.
 4. Copy the deployment file of the chosen service and edit it with the next changes:
-    - a different name, app and value for the enviromental variable "VERSION", e.g., "cart1" instead of "cart" for the cart service
-    - change the image to the created in step 4 Docker image
-    - change "port" in the Service configuration to an arbitrary one
+    - a different name, app and value for the enviromental variable "VERSION", e.g., "cart1" instead of "cart" for the cart service,
+    - change the image to the created in _step 3_ Docker image,
+    - change "port" in the Service configuration to an arbitrary one.
 
 > Note that the new port number is arbitrary but should not collide with the existing services. For that check the ports in the deployment files in the respective Service configuration sections.
   
