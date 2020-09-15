@@ -1,12 +1,17 @@
 # BookStore - a microservice testbed
 
-### Services' overview
 
-* Catalogue Management
-* User Management
-* Employee Management
-* Cart Management
-* Order Management
+### Overall information
+
+The application has the following services:
+
+* Catalogue Management,
+* User Management,
+* Employee Management,
+* Cart Management,
+* Order Management.
+
+Each service has its own [MongoDB](https://www.mongodb.com/de) database and the asynchromous communication between the services is implemented with help of [RabbitMQ](https://www.rabbitmq.com/).
 
 To get the **OpenAPI 3.0** specification run the following command, where _name_ is the pod's name of the desired service:
 
@@ -63,7 +68,7 @@ kubectl apply -f rabbitmq.yaml
 
 If no errors occured - the application has to be running on **ip**:_port_.
 
- > For more details visit.
+ > For more details visit https://cloud.google.com/istio/docs/istio-on-gke/installing.
 
 ## Monitoring
 
