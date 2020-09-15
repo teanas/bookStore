@@ -30,24 +30,26 @@ To see it in the Swagger UI run `kubectl exec _name_ -- curl localhost:7777/swag
 
 > The application can be run either in a local Kubernetes cluster, or in a cluster in the cloud. The recommended choice is using the [GKE cloud](https://cloud.google.com/kubernetes-engine). Therefore, the whole setup is under the assumption that the cloud option has been chosen.
 
-0. First, run `gcloud auth login` in the command line.
-1. Create a project `gcloud projects create bookstore`.
-2. Set the configured project as your default `gcloud config set project bookstore`.
+0. First, run `gcloud auth login` in the command line. Set the zone to the desired one, e.g., to us-west1-a: `gcloud config set compute/zone us-west1-a`.
+1. Create a project `gcloud projects create bookstore12312434`.
+   - if the project is not created, keep changing the name until you find an available one,
+   - visit https://console.cloud.google.com/projectselector/kubernetes to enable billing in your projext.
+2. Set the configured project as your default `gcloud config set project bookstore12312434`.
 3. Install the kubectl-command tool for your project `gcloud components install kubectl`.
 4. Create a cluster with Istio enabled: 
 
   ```
-  gcloud beta container clusters create bookstore-cluster \
-    --addons=Istio --istio-config=auth=MTLS_PERMISSIVE \
-    --cluster-version=1.4.10-gke.5 \
-    --machine-type=n1-standard-2 \
+  gcloud beta container clusters create bookstore-cluster 
+    --addons=Istio --istio-config=auth=MTLS_PERMISSIVE 
+    --machine-type=n1-standard-2 
     --num-nodes=4
   ```
 5. Verify that the cluster is running `gcloud container clusters list` and services istio-citadel, istio-egressgateway, istio-pilot, istio-ingressgateway, istio-policy, istio-sidecar-injector, and istio-telemetry are deployed `kubectl get service -n istio-system`.
+    - to get credentials for the cluster run `gcloud container clusters get-credentials bookstore-cluster`.
 6. Grant cluster admin permissions to the current user:
 
-`kubectl create clusterrolebinding cluster-admin-binding \
-    --clusterrole=cluster-admin \
+`kubectl create clusterrolebinding cluster-admin-binding 
+    --clusterrole=cluster-admin 
     --user=$(gcloud config get-value core/account)`
     
 7. Enable the sidecar injection for the cluster `kubectl label namespace default istio-injection=enabled`.
@@ -63,8 +65,8 @@ kubectl apply -f rabbitmq.yaml
 9. Ensure all the services are running `kubectl get pods` and deploy the gateway `kubectl apply -f gateway.yaml`.
 10. To find out, on what ip the cluster is running, perform following commands: 
 
-  - **ip**: `kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')`
-  - _port_: `(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')`
+  - **ip**: `kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`
+  - _port_: `kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name==\"http2\")].port}'`
 
 If no errors occured - the application has to be running on **ip**:_port_.
 
