@@ -53,7 +53,7 @@ kubectl apply -f deployment-v1.yaml
 kubectl apply -f rabbitmq.yaml
 ```
 
->Note that for the mixed version not only deployments and services have to be deployed, but also destination rules.
+>Keep in mind, that if you want to have both versions of one service running, you need to deploy not only its deployments and services, but also the appropriate destination rule.
 
 9. Ensure all the services are running `kubectl get pods` and deploy the gateway `kubectl apply -f gateway.yaml`.
 10. To find out, on what ip the cluster is running, perform following commands: 
@@ -118,14 +118,28 @@ and go to localhost:20001.
 
 
 ## Extend the application
-mvn clean install
 
-docker build -t "name":1.0 .
+In our case, extending the testbed can be delivered easily thanks to Istio. Follow the next steps:
+1. Copy one of the existing services.
+    - If desired, edit it in the preferred IDE -_can be skipped_.
+2. Change its main path in the **controller class** (e.g., change "/cart" to "/cart1" in the CartController class for the cart service).
+3. Create a new Docker image.
+4. Add another deployment file of the chosen service (but with a different naming, e.g., "cart1" instead of "cart" for the cart service, and the created in step 4 Docker image).
+5. Extend the istio-gateway file accordingly with a new entry for the virtual service under **http**. Following is an example for an added cart service with "/cart1", named "cart1" and 8888 as a port: 
+```
+- match:
+    - uri:
+        prefix: "/cart1"
+    route:
+    - destination:
+        host: cart1
+        port:
+          number: 8888
+ ```  
 
-docker login
+       
+> Note that the new port number is arbitrary but should not collide with the existing services. For that check the ports in the gateway deployment file.
 
-docker tag "name":latest docker push teanas/testbed/"name":tagname
-docker push teanas/testbed/"name":tagname 
 
 
   
