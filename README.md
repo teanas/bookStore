@@ -11,7 +11,7 @@ The application has the following services:
 * Cart Management,
 * Order Management.
 
-Each service has its own [MongoDB](https://www.mongodb.com/de) database and the asynchromous communication between the services is implemented with help of [RabbitMQ](https://www.rabbitmq.com/).
+Each service has its own [MongoDB](https://www.mongodb.com/de) database instance. The asynchromous communication between the services is implemented with help of [RabbitMQ](https://www.rabbitmq.com/).
 
 To get the **OpenAPI 3.0** specification run the following command, where _name_ is the pod's name of the desired service:
 
