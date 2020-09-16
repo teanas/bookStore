@@ -24,7 +24,8 @@ To see it in the Swagger UI run `kubectl exec _name_ -- curl localhost:7777/swag
 ## Requirements
 
 - A Google Cloud account,
-- The [gcloud-command tool](https://cloud.google.com/sdk/docs/quickstart).
+- The [gcloud-command tool](https://cloud.google.com/sdk/docs/quickstart),
+- [istioctl-command tool](https://istio.io/latest/docs/setup/getting-started/#download).
 
 ## Installation
 
@@ -53,6 +54,7 @@ To see it in the Swagger UI run `kubectl exec _name_ -- curl localhost:7777/swag
     --user=$(gcloud config get-value core/account)`
     
 7. Enable the sidecar injection for the cluster `kubectl label namespace default istio-injection=enabled`.
+   - run `istioctl manifest apply --set profile=demo`. If any errors occur, you can ignore them (not relevant for this project).
 8. Deploy the desired application configuration. For instance, to deploy version 1:
 
 ```
