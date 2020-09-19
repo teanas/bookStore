@@ -102,7 +102,7 @@ In our case, extending the testbed can be delivered easily thanks to Istio. Foll
 
 > Note that the new port number is arbitrary but should not collide with the existing services. For that check the ports in the deployment files in the respective Service configuration sections.
   
-5. Extend the istio-gateway file accordingly with a new entry for the virtual service under **http**. Following is an example for an added cart service with "/cart1" and named "cart1": 
+5. Extend the gateway.yaml file accordingly with a new entry for the virtual service under **http**. Following is an example for an added cart service with "/cart1" and named "cart1": 
 ```
 - match:
     - uri:
