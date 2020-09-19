@@ -1,0 +1,81 @@
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: cart-db
+  labels:  
+    appdb: cart-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: cart-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: cart-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017 
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: cart-db
+  labels:  
+    app: cart-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: cart-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-v1
+  labels:
+    app: cart
+spec:
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+      - name: cart
+        image: teanas/testbed-cart:1.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "cart-v1" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+  labels:
+    app: cart
+spec:
+  type: NodePort
+  ports:
+    - port: 8081
+      targetPort: 7777
+      name: http
+  selector:
+    app: cart

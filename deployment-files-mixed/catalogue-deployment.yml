@@ -1,0 +1,117 @@
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: catalogue-db
+  labels:  
+    appdb: catalogue-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: catalogue-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: catalogue-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017  
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: catalogue-db
+  labels:  
+    app: catalogue-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: catalogue-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-v1
+  labels:
+    app: catalogue
+spec:
+  selector:
+    matchLabels:
+      app: catalogue
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: catalogue
+        version: v1
+    spec:
+      containers:
+      - name: catalogue
+        image: teanas/testbed-catalogue:1.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "catalogue-v1" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-v2
+  labels:
+    app: catalogue
+spec:
+  selector:
+    matchLabels:
+      app: catalogue
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: catalogue
+        version: v2
+    spec:
+      containers:
+      - name: catalogue
+        image: teanas/testbed-catalogue:2.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "catalogue-v2" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+  labels:
+    app: catalogue
+spec:
+  type: NodePort
+  ports:
+    - port: 8082
+      targetPort: 7777
+      name: http
+  selector:
+    app: catalogue

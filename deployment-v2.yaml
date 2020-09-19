@@ -1,0 +1,409 @@
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: cart-db
+  labels:  
+    appdb: cart-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: cart-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: cart-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017 
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: cart-db
+  labels:  
+    app: cart-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: cart-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-v2
+  labels:
+    app: cart
+spec:
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+      - name: cart
+        image: teanas/testbed-cart:2.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "cart-v2" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+  labels:
+    app: cart
+spec:
+  type: NodePort
+  ports:
+    - port: 8081
+      targetPort: 7777
+      name: http
+  selector:
+    app: cart
+---
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: catalogue-db
+  labels:  
+    appdb: catalogue-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: catalogue-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: catalogue-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017  
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: catalogue-db
+  labels:  
+    app: catalogue-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: catalogue-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-v2
+  labels:
+    app: catalogue
+spec:
+  selector:
+    matchLabels:
+      app: catalogue
+  template:
+    metadata:
+      labels:
+        app: catalogue
+    spec:
+      containers:
+      - name: catalogue
+        image: teanas/testbed-catalogue:2.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "catalogue-v2" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+  labels:
+    app: catalogue
+spec:
+  type: NodePort
+  ports:
+    - port: 8082
+      targetPort: 7777
+      name: http
+  selector:
+    app: catalogue
+---
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: order-db
+  labels:  
+    appdb: order-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: order-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: order-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017  
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: order-db
+  labels:  
+    app: order-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: order-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-v2
+  labels:
+    app: order
+spec:
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+      - name: order
+        image: teanas/testbed-order:2.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "order-v2" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+  labels:
+    app: order
+spec:
+  type: NodePort
+  ports:
+    - port: 8083
+      targetPort: 7777
+      name: http
+  selector:
+    app: order
+---
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: user-db
+  labels:  
+    appdb: user-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: user-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: user-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017  
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: user-db
+  labels:  
+    app: user-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: user-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-v2
+  labels:
+    app: user
+spec:
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - name: user
+        image: teanas/testbed-user:2.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "user-v2" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  labels:
+    app: user
+spec:
+  type: NodePort
+  ports:
+    - port: 8084
+      targetPort: 7777
+      name: http
+  selector:
+    app: user
+---
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: employee-db
+  labels:  
+    appdb: employee-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: employee-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: employee-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017  
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: employee-db
+  labels:  
+    app: employee-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: employee-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-v2
+  labels:
+    app: employee
+spec:
+  selector:
+    matchLabels:
+      app: employee
+  template:
+    metadata:
+      labels:
+        app: employee
+    spec:
+      containers:
+      - name: employee
+        image: teanas/testbed-employee:2.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "employee-v2" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee
+  labels:
+    app: employee
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 7777
+      name: http
+  selector:
+    app: employee

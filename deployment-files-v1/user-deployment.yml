@@ -1,0 +1,81 @@
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: user-db
+  labels:  
+    appdb: user-db
+spec:  
+  replicas: 1  
+  selector:  
+    matchLabels:  
+      appdb: user-db
+  template:  
+    metadata:  
+      labels:  
+        appdb: user-db
+    spec:  
+      containers:  
+        - name: mongodb  
+          image: mongo:3.6.6  
+          ports:  
+            - containerPort: 27017  
+---  
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: user-db
+  labels:  
+    app: user-db
+spec:  
+  ports:  
+    - port: 27017  
+      protocol: TCP  
+  selector:  
+    appdb: user-db
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-v1
+  labels:
+    app: user
+spec:
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - name: user
+        image: teanas/testbed-user:1.0
+        ports:
+        - containerPort: 7777
+          name: http
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        imagePullPolicy: Always
+        env:
+        - name: VERSION
+          value: "user-v1" 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  labels:
+    app: user
+spec:
+  type: NodePort
+  ports:
+    - port: 8084
+      targetPort: 7777
+      name: http
+  selector:
+    app: user
