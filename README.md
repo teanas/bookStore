@@ -61,7 +61,7 @@ kubectl apply -f deployment-v1.yaml
 kubectl apply -f rabbitmq.yaml
 ```
 
->Keep in mind, that if you want to have both versions of one service running, you need to deploy not only its deployments and services, but also the appropriate destination rule.
+>All configurations used in the thesis are available as as-is files. To construct your own configuration, the deployment files of individual services are available in the folders deployment-files-xx (where xx is the version of the services in the folder). Keep in mind, that if you want to have both versions of one service running (the mixed folder), you need to deploy not only its deployments and service, but also the appropriate destination rule which is located in deployment-files-mixed/destination rules.
 
 9. Ensure all the services are running `kubectl get pods` and deploy the gateway `kubectl apply -f gateway.yaml`.
 10. To find out, on what ip the cluster is running, perform following commands: 
