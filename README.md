@@ -88,11 +88,11 @@ Run following commands to open a responsive dashboard:
 * Jaeger: `istioctl dashboard jaeger`.
 
 
-## Extend the application
+## Extending the application
 
-In our case, extending the testbed can be delivered easily thanks to Istio. Follow the next steps:
+In our case, extending the testbed can be delivered easily thanks to Istio. In addition to simply increasing the number of instances of one service with `kubectl scale --replicas=3 -f foo`, one can also quickly add another service. Follow the next steps:
 1. Copy one of the existing services.
-    - If desired, edit it in the preferred IDE -_can be skipped_.
+    - If desired, edit it in the preferred IDE - _can be skipped_.
 2. Change its main path in the **controller class** (e.g., change "/cart" to "/cart1" in the CartController class for the cart service).
 3. Create a new Docker image.
 4. Copy the deployment file of the chosen service and edit it with the next changes:
@@ -102,7 +102,7 @@ In our case, extending the testbed can be delivered easily thanks to Istio. Foll
 
 > Note that the new port number is arbitrary but should not collide with the existing services. For that check the ports in the deployment files in the respective Service configuration sections.
   
-5. Extend the gateway.yaml file accordingly with a new entry for the virtual service under **http**. Following is an example for an added cart service with "/cart1" and named "cart1": 
+5. Extend the gateway.yaml file accordingly with a new entry for the virtual service under **http**. Following is an example for a changed cart service with "/cart1" and named "cart1": 
 ```
 - match:
     - uri:
