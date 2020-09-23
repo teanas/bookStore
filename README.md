@@ -84,9 +84,10 @@ Run following commands to open a responsive dashboard:
 
 * Prometheus: `istioctl dashboard prometheus`,
 * Grafana: `istioctl dashboard grafana`,
-* Kiali: `istioctl dashboard kiali`,
+* Kiali: `istioctl dashboard kiali` (default credentials are username: admin,password: admin),
 * Jaeger: `istioctl dashboard jaeger`.
 
+To start seeing the metrics, you need to send some requests to the services. This can be done via, e.g., Postman.
 
 ## Extending the application
 
